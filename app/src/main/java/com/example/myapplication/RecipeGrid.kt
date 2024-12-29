@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -90,7 +91,7 @@ fun RecipeGridItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(0.8f),
+            .aspectRatio(0.75f),
         onClick = onClick,
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp,
@@ -104,38 +105,46 @@ fun RecipeGridItem(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            // Image at the top, taking up about 40% of the card height
+            Image(
+                painter = painterResource(id = recipe.image),
+                contentDescription = recipe.name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.4f)
+                    .clip(RoundedCornerShape(8.dp))
+            )
+
+            // Title
             Text(
                 text = recipe.name,
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
+                maxLines = 2,
+                modifier = Modifier.weight(0.2f)
             )
 
-            Image(
-                painter = painterResource(id = recipe.image),
-                contentDescription = recipe.name,
-                modifier = Modifier
-                    .size(192.dp, 108.dp)
-                    .clip(RoundedCornerShape(10.dp))
-            )
-
+            // Description
             Text(
                 text = recipe.description,
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(bottom = 8.dp)
+                maxLines = 2,
+                modifier = Modifier.weight(0.25f)
             )
 
+            // Score at the bottom
             Surface(
                 color = MaterialTheme.colorScheme.primaryContainer,
                 shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.clip(MaterialTheme.shapes.medium)
+                modifier = Modifier.weight(0.15f)
             ) {
                 Text(
                     text = "Puntuación: ${recipe.nutritionalScore}",

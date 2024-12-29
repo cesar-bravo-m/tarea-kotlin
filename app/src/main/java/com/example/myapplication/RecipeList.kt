@@ -191,7 +191,7 @@ fun RecipeList(innerPadding: PaddingValues) {
             image = R.drawable.empanadas
         ),
         Recipe(
-            name = "Ensalada Mediterránea",
+            name = "Ensalada Chilena",
             nutritionalScore = 90,
             description = "Ensalada saludable con ingredientes frescos.",
             ingredients = listOf(
