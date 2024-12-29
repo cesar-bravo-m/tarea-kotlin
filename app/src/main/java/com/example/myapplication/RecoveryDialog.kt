@@ -2,18 +2,14 @@ package com.example.myapplication
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
@@ -28,6 +24,8 @@ fun RecoveryDialog(
     setVerificationCode: (String) -> Unit,
     context: Context
 ) {
+    val (newPassword, setNewPassword) = remember { mutableStateOf("") }
+
     Dialog(onDismissRequest = {
         setShowRecoveryDialog(false)
         setRecoveryStep(1)
@@ -44,8 +42,9 @@ fun RecoveryDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = if (recoveryStep == 1) "Ingresa tu email" else "Enter Verification Code",
+                    text = if (recoveryStep == 1) "Recuperar Contraseña" else "Verificar Código",
                     style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
@@ -61,24 +60,43 @@ fun RecoveryDialog(
 
                     Button(
                         onClick = {
-                            if (email.isNotEmpty()) {
+                            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                                Toast.makeText(context, "Email inválido", Toast.LENGTH_SHORT).show()
+                                return@Button
+                            }
+                            if (UserManager.verifyEmail(email)) {
                                 setRecoveryStep(2)
                                 Toast.makeText(
                                     context,
-                                    "Verification code sent to email",
+                                    "Código enviado a su email",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Email no encontrado",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Enviar código")
+                        Text("Enviar Código")
                     }
                 } else {
                     OutlinedTextField(
                         value = verificationCode,
                         onValueChange = { setVerificationCode(it) },
-                        label = { Text("Código de verificación") },
+                        label = { Text("Código de Verificación") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp)
+                    )
+
+                    OutlinedTextField(
+                        value = newPassword,
+                        onValueChange = { setNewPassword(it) },
+                        label = { Text("Nueva Contraseña") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 16.dp)
@@ -87,21 +105,32 @@ fun RecoveryDialog(
                     Button(
                         onClick = {
                             if (verificationCode == "000") {
-                                setShowRecoveryDialog(false)
-                                setRecoveryStep(1)
+                                if (UserManager.resetPassword(email, newPassword)) {
+                                    Toast.makeText(
+                                        context,
+                                        "Contraseña actualizada exitosamente",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    setShowRecoveryDialog(false)
+                                    setRecoveryStep(1)
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Error al actualizar la contraseña",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            } else {
                                 Toast.makeText(
                                     context,
-                                    "Link de recuperación de contraseña enviado",
-                                    Toast.LENGTH_LONG
+                                    "Código inválido. Use: 000",
+                                    Toast.LENGTH_SHORT
                                 ).show()
-                            } else {
-                                Toast.makeText(context, "(el código es 000)", Toast.LENGTH_SHORT)
-                                    .show()
                             }
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Verificar código")
+                        Text("Verificar y Cambiar Contraseña")
                     }
                 }
 
@@ -111,7 +140,7 @@ fun RecoveryDialog(
                         setRecoveryStep(1)
                     }
                 ) {
-                    Text("CAncelar")
+                    Text("Cancelar")
                 }
             }
         }

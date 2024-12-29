@@ -70,8 +70,17 @@ fun LoginScreen(
         )
         Button(
             onClick = {
-                Toast.makeText(context, "¡Inicio de sesión exitoso!", Toast.LENGTH_SHORT).show()
-                setIsLoggedIn(true)
+                if (username.isBlank() || password.isBlank()) {
+                    Toast.makeText(context, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
+                
+                if (UserManager.authenticate(username, password)) {
+                    Toast.makeText(context, "¡Inicio de sesión exitoso!", Toast.LENGTH_SHORT).show()
+                    setIsLoggedIn(true)
+                } else {
+                    Toast.makeText(context, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()

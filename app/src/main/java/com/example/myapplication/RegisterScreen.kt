@@ -89,16 +89,24 @@ fun RegisterScreen(
 
         Button(
             onClick = {
-                if (password != confirmPassword) {
-                    Toast.makeText(context, "Passwords do not match!", Toast.LENGTH_SHORT).show()
-                    return@Button
-                }
                 if (username.isBlank() || email.isBlank() || password.isBlank()) {
-                    Toast.makeText(context, "Please fill all fields!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
-                Toast.makeText(context, "Registration successful!", Toast.LENGTH_SHORT).show()
-                setIsLoggedIn(true)
+                if (password != confirmPassword) {
+                    Toast.makeText(context, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    Toast.makeText(context, "Email inválido", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
+                if (UserManager.register(username, password, email)) {
+                    Toast.makeText(context, "¡Registro exitoso!", Toast.LENGTH_SHORT).show()
+                    setIsLoggedIn(true)
+                } else {
+                    Toast.makeText(context, "El usuario o email ya existe", Toast.LENGTH_SHORT).show()
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
