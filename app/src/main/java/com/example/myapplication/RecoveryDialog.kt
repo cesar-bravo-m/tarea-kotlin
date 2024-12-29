@@ -44,7 +44,7 @@ fun RecoveryDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = if (recoveryStep == 1) "Enter Email" else "Enter Verification Code",
+                    text = if (recoveryStep == 1) "Ingresa tu email" else "Enter Verification Code",
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
@@ -72,13 +72,13 @@ fun RecoveryDialog(
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Send Code")
+                        Text("Enviar código")
                     }
                 } else {
                     OutlinedTextField(
                         value = verificationCode,
                         onValueChange = { setVerificationCode(it) },
-                        label = { Text("Verification Code") },
+                        label = { Text("Código de verificación") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 16.dp)
@@ -91,17 +91,17 @@ fun RecoveryDialog(
                                 setRecoveryStep(1)
                                 Toast.makeText(
                                     context,
-                                    "Password reset successful! Check your email",
+                                    "Link de recuperación de contraseña enviado",
                                     Toast.LENGTH_LONG
                                 ).show()
                             } else {
-                                Toast.makeText(context, "Invalid code. Try 000", Toast.LENGTH_SHORT)
+                                Toast.makeText(context, "(el código es 000)", Toast.LENGTH_SHORT)
                                     .show()
                             }
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Verify Code")
+                        Text("Verificar código")
                     }
                 }
 
@@ -111,7 +111,7 @@ fun RecoveryDialog(
                         setRecoveryStep(1)
                     }
                 ) {
-                    Text("Cancel")
+                    Text("CAncelar")
                 }
             }
         }

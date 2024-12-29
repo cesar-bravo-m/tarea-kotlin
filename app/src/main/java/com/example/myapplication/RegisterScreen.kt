@@ -44,7 +44,7 @@ fun RegisterScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Register",
+            text = "Crear cuenta",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 32.dp)
         )
@@ -52,7 +52,7 @@ fun RegisterScreen(
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text("Username") },
+            label = { Text("Nombre de usuario") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
@@ -70,7 +70,7 @@ fun RegisterScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { Text("Contraseña") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier
                 .fillMaxWidth()
@@ -80,7 +80,7 @@ fun RegisterScreen(
         OutlinedTextField(
             value = confirmPassword,
             onValueChange = { confirmPassword = it },
-            label = { Text("Confirm Password") },
+            label = { Text("Confirmar contraseña") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier
                 .fillMaxWidth()
@@ -104,13 +104,13 @@ fun RegisterScreen(
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         ) {
-            Text("Register")
+            Text("Crear cuenta")
         }
 
         TextButton(
             onClick = { setShowRegister(false) }
         ) {
-            Text("Already have an account? Login")
+            Text("¿Ya tienes una cuenta? Inicia sesión")
         }
     }
 } 

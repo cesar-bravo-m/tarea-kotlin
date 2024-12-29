@@ -45,7 +45,7 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Login",
+            text = "Iniciar sesión",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 32.dp)
         )
@@ -53,7 +53,7 @@ fun LoginScreen(
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text("Username") },
+            label = { Text("Nombre de usuario") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
@@ -62,7 +62,7 @@ fun LoginScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { Text("Contraseña") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier
                 .fillMaxWidth()
@@ -70,7 +70,7 @@ fun LoginScreen(
         )
         Button(
             onClick = {
-                Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "¡Inicio de sesión exitoso!", Toast.LENGTH_SHORT).show()
                 setIsLoggedIn(true)
             },
             modifier = Modifier
@@ -83,7 +83,7 @@ fun LoginScreen(
         TextButton(
             onClick = { setShowRegister(true) }
         ) {
-            Text("Don't have an account? Register")
+            Text("¿No tienes cuenta? Regístrate")
         }
 
         TextButton(
@@ -94,7 +94,7 @@ fun LoginScreen(
                 setVerificationCode("")
             }
         ) {
-            Text("Recover Password")
+            Text("Recuperar contraseña")
         }
     }
 }

@@ -137,12 +137,11 @@ fun RecipeDetail(
                     
                     NutritionalInfoRow("Puntuación General", "${recipe.nutritionalScore}/100")
                     Divider()
-                    NutritionalInfoRow("Calorías", "350 kcal")
-                    NutritionalInfoRow("Proteínas", "20g")
-                    NutritionalInfoRow("Carbohidratos", "45g")
-                    NutritionalInfoRow("Grasas", "12g")
-                    NutritionalInfoRow("Fibra", "5g")
-                    NutritionalInfoRow("Sodio", "400mg")
+                    NutritionalInfoRow("Calorías", "${recipe.calories} kcal")
+                    NutritionalInfoRow("Proteínas", "${recipe.protein}g")
+                    NutritionalInfoRow("Carbohidratos", "${recipe.carbs}g")
+                    NutritionalInfoRow("Fibra", "${recipe.fiber}g")
+                    NutritionalInfoRow("Sodio", "${recipe.sodium}mg")
                 }
             }
 
@@ -162,10 +161,12 @@ fun RecipeDetail(
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
-                    Text(
-                        text = "• Ingrediente 1\n• Ingrediente 2\n• Ingrediente 3\n• Ingrediente 4",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+                    recipe.ingredients.forEach { ingredient ->
+                        Text(
+                            text = "• $ingredient",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
                 }
             }
 
@@ -185,10 +186,12 @@ fun RecipeDetail(
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
-                    Text(
-                        text = "1. Paso 1\n2. Paso 2\n3. Paso 3\n4. Paso 4",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+                    recipe.instructions.forEachIndexed { index, instruction ->
+                        Text(
+                            text = "${index + 1}. $instruction",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
                 }
             }
         }

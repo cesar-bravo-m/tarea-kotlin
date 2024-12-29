@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -20,14 +21,16 @@ fun DayRecipeCard(
     isSelected: Boolean,
     onDaySelected: () -> Unit,
     onRecipeSelected: (Recipe) -> Unit,
-    onChangeRecipeClick: () -> Unit
+    onChangeRecipeClick: () -> Unit,
+    setShowRecipeDetail: (Boolean) -> Unit,
+    setSelectedRecipeDetail: (Recipe) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 4.dp, vertical = 2.dp),
-        border = if (isSelected) 
-            BorderStroke(2.dp, MaterialTheme.colorScheme.primary) 
+        border = if (isSelected)
+            BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
         else null,
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected) {
@@ -53,9 +56,9 @@ fun DayRecipeCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Surface(
-                    color = if (isSelected) 
+                    color = if (isSelected)
                         MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                    else 
+                    else
                         MaterialTheme.colorScheme.surfaceVariant,
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier.clip(MaterialTheme.shapes.medium)
@@ -63,9 +66,9 @@ fun DayRecipeCard(
                     Text(
                         text = day,
                         style = MaterialTheme.typography.titleMedium,
-                        color = if (isSelected) 
-                            MaterialTheme.colorScheme.primary 
-                        else 
+                        color = if (isSelected)
+                            MaterialTheme.colorScheme.primary
+                        else
                             MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                         fontWeight = FontWeight.Bold
@@ -95,7 +98,14 @@ fun DayRecipeCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Top
                 ) {
-                    Column(modifier = Modifier.weight(1f)) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable {
+                                setShowRecipeDetail(true)
+                                setSelectedRecipeDetail(selectedRecipe)
+                            }
+                    ) {
                         Text(
                             text = selectedRecipe.name,
                             style = MaterialTheme.typography.titleLarge,
@@ -129,13 +139,6 @@ fun DayRecipeCard(
                         .padding(vertical = 16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = "Elegir Receta",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
                     Button(
                         onClick = onChangeRecipeClick,
                         modifier = Modifier.fillMaxWidth(0.8f),
@@ -158,4 +161,4 @@ fun DayRecipeCard(
             }
         }
     }
-} 
+}
