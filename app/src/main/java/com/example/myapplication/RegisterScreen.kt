@@ -24,18 +24,17 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     innerPadding: PaddingValues,
-    setShowRecoveryDialog: (Boolean) -> Unit,
-    setRecoveryStep: (Int) -> Unit,
-    setEmail: (String) -> Unit,
-    setVerificationCode: (String) -> Unit,
     setIsLoggedIn: (Boolean) -> Unit,
     setShowRegister: (Boolean) -> Unit,
     context: Context
 ) {
     var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,7 +44,7 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Login",
+            text = "Register",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 32.dp)
         )
@@ -60,6 +59,15 @@ fun LoginScreen(
         )
 
         OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+        )
+
+        OutlinedTextField(
             value = password,
             onValueChange = { password = it },
             label = { Text("Password") },
@@ -68,33 +76,41 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         )
+
+        OutlinedTextField(
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
+            label = { Text("Confirm Password") },
+            visualTransformation = PasswordVisualTransformation(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+        )
+
         Button(
             onClick = {
-                Toast.makeText(context, "Login successful!", Toast.LENGTH_SHORT).show()
+                if (password != confirmPassword) {
+                    Toast.makeText(context, "Passwords do not match!", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
+                if (username.isBlank() || email.isBlank() || password.isBlank()) {
+                    Toast.makeText(context, "Please fill all fields!", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
+                Toast.makeText(context, "Registration successful!", Toast.LENGTH_SHORT).show()
                 setIsLoggedIn(true)
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         ) {
-            Text("Login")
+            Text("Register")
         }
 
         TextButton(
-            onClick = { setShowRegister(true) }
+            onClick = { setShowRegister(false) }
         ) {
-            Text("Don't have an account? Register")
-        }
-
-        TextButton(
-            onClick = {
-                setShowRecoveryDialog(true)
-                setRecoveryStep(1)
-                setEmail("")
-                setVerificationCode("")
-            }
-        ) {
-            Text("Recover Password")
+            Text("Already have an account? Login")
         }
     }
-}
+} 

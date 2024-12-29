@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 
@@ -24,7 +23,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun App() {
     val (showRecoveryDialog, setShowRecoveryDialog) = remember { mutableStateOf(false) }
-    val (recoveryStep, setRecoveryStep) = remember { mutableStateOf(1) }
+    val (showRegister, setShowRegister) = remember { mutableStateOf(false) }
+    val (recoveryStep, setRecoveryStep) = remember { mutableIntStateOf(1) }
     val (email, setEmail) = remember { mutableStateOf("") }
     val (verificationCode, setVerificationCode) = remember { mutableStateOf("") }
     val (isLoggedIn, setIsLoggedIn) = remember { mutableStateOf(false) }
@@ -33,6 +33,13 @@ fun App() {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         if (isLoggedIn) {
             RecipeList(innerPadding)
+        } else if (showRegister) {
+            RegisterScreen(
+                innerPadding,
+                setIsLoggedIn,
+                setShowRegister,
+                context
+            )
         } else if (!isLoggedIn && !showRecoveryDialog) {
             LoginScreen(
                 innerPadding,
@@ -41,6 +48,7 @@ fun App() {
                 setEmail,
                 setVerificationCode,
                 setIsLoggedIn,
+                setShowRegister,
                 context
             )
         } else if (!isLoggedIn && showRecoveryDialog) {
