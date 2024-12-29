@@ -45,7 +45,7 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Iniciar sesión",
+            text = "Sabor Diario",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 32.dp)
         )
@@ -77,7 +77,7 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         ) {
-            Text("Login")
+            Text("Iniciar sesión")
         }
 
         TextButton(

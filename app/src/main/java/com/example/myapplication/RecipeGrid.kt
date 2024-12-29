@@ -109,7 +109,6 @@ fun RecipeGridItem(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Image at the top, taking up about 40% of the card height
             Image(
                 painter = painterResource(id = recipe.image),
                 contentDescription = recipe.name,
@@ -120,7 +119,6 @@ fun RecipeGridItem(
                     .clip(RoundedCornerShape(8.dp))
             )
 
-            // Title
             Text(
                 text = recipe.name,
                 style = MaterialTheme.typography.titleMedium,
@@ -130,7 +128,6 @@ fun RecipeGridItem(
                 modifier = Modifier.weight(0.2f)
             )
 
-            // Description
             Text(
                 text = recipe.description,
                 style = MaterialTheme.typography.bodySmall,
@@ -140,7 +137,6 @@ fun RecipeGridItem(
                 modifier = Modifier.weight(0.25f)
             )
 
-            // Score at the bottom
             Surface(
                 color = MaterialTheme.colorScheme.primaryContainer,
                 shape = MaterialTheme.shapes.medium,
