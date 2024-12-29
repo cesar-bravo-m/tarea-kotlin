@@ -18,7 +18,8 @@ data class Recipe(
     val protein: Int,
     val carbs: Int,
     val fiber: Int,
-    val sodium: Int
+    val sodium: Int,
+    val image: Int
 )
 
 @Composable
@@ -39,7 +40,8 @@ fun RecipeList(innerPadding: PaddingValues) {
             protein = 25,
             carbs = 35,
             fiber = 5,
-            sodium = 600
+            sodium = 600,
+            image = R.drawable.tacos_pollo
         ),
         Recipe(
             name = "Paella de Mariscos",
@@ -63,7 +65,8 @@ fun RecipeList(innerPadding: PaddingValues) {
             protein = 30,
             carbs = 50,
             fiber = 3,
-            sodium = 800
+            sodium = 800,
+            image = R.drawable.paella_mariscos
         ),
         Recipe(
             name = "Gazpacho Andaluz",
@@ -87,7 +90,8 @@ fun RecipeList(innerPadding: PaddingValues) {
             protein = 2,
             carbs = 12,
             fiber = 4,
-            sodium = 300
+            sodium = 300,
+            image = R.drawable.gazpacho
         ),
         Recipe(
             name = "Tortilla Española",
@@ -104,7 +108,8 @@ fun RecipeList(innerPadding: PaddingValues) {
             protein = 10,
             carbs = 20,
             fiber = 2,
-            sodium = 400
+            sodium = 400,
+            image = R.drawable.tortilla
         ),
         Recipe(
             name = "Empanadas de Carne",
@@ -128,7 +133,8 @@ fun RecipeList(innerPadding: PaddingValues) {
             protein = 15,
             carbs = 25,
             fiber = 3,
-            sodium = 500
+            sodium = 500,
+            image = R.drawable.empanadas
         ),
         Recipe(
             name = "Churros con Chocolate",
@@ -145,7 +151,8 @@ fun RecipeList(innerPadding: PaddingValues) {
             protein = 5,
             carbs = 60,
             fiber = 2,
-            sodium = 200
+            sodium = 200,
+            image = R.drawable.churros
         ),
         Recipe(
             name = "Ceviche de Pescado",
@@ -162,7 +169,8 @@ fun RecipeList(innerPadding: PaddingValues) {
             protein = 20,
             carbs = 5,
             fiber = 1,
-            sodium = 400
+            sodium = 400,
+            image = R.drawable.paella_mariscos
         ),
         Recipe(
             name = "Arepas Rellenas",
@@ -179,7 +187,8 @@ fun RecipeList(innerPadding: PaddingValues) {
             protein = 15,
             carbs = 30,
             fiber = 3,
-            sodium = 500
+            sodium = 500,
+            image = R.drawable.empanadas
         ),
         Recipe(
             name = "Ensalada Mediterránea",
@@ -203,7 +212,8 @@ fun RecipeList(innerPadding: PaddingValues) {
             protein = 5,
             carbs = 10,
             fiber = 3,
-            sodium = 300
+            sodium = 300,
+            image = R.drawable.ensalada
         ),
         Recipe(
             name = "Flan Casero",
@@ -220,7 +230,8 @@ fun RecipeList(innerPadding: PaddingValues) {
             protein = 7,
             carbs = 30,
             fiber = 0,
-            sodium = 150
+            sodium = 150,
+            image = R.drawable.flan
         )
     )
 
