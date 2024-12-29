@@ -17,19 +17,19 @@ data class Recipe(
 @Composable
 fun RecipeList(innerPadding: PaddingValues) {
     val recipes = listOf(
-        Recipe("Spaghetti Carbonara", 75, "Classic Italian pasta dish"),
-        Recipe("Grilled Chicken Salad", 90, "Healthy and light"),
-        Recipe("Beef Stir Fry", 80, "Quick and nutritious"),
-        Recipe("Vegetable Curry", 85, "Flavorful Indian dish"),
-        Recipe("Salmon with Rice", 95, "Omega-3 rich meal"),
-        Recipe("Quinoa Bowl", 88, "High protein vegetarian option"),
-        Recipe("Turkey Sandwich", 70, "Quick lunch option"),
-        Recipe("Greek Salad", 92, "Mediterranean favorite"),
-        Recipe("Chicken Soup", 78, "Comforting classic"),
-        Recipe("Tofu Stir Fry", 87, "Vegetarian delight")
+        Recipe("Espaguetis Carbonara", 75, "Plato clásico italiano"),
+        Recipe("Ensalada de Pollo a la Parrilla", 90, "Saludable y ligero"),
+        Recipe("Salteado de Res", 80, "Rápido y nutritivo"),
+        Recipe("Curry de Verduras", 85, "Sabroso plato indio"),
+        Recipe("Salmón con Arroz", 95, "Rica en omega-3"),
+        Recipe("Tazón de Quinoa", 88, "Opción vegetariana alta en proteínas"),
+        Recipe("Sándwich de Pavo", 70, "Opción rápida para el almuerzo"),
+        Recipe("Ensalada Griega", 92, "Favorito mediterráneo"),
+        Recipe("Sopa de Pollo", 78, "Clásico reconfortante"),
+        Recipe("Salteado de Tofu", 87, "Delicia vegetariana")
     )
 
-    val daysOfWeek = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+    val daysOfWeek = listOf("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo")
     var selectedRecipes by remember { 
         mutableStateOf(mutableMapOf<String, Recipe>()) 
     }
@@ -55,7 +55,7 @@ fun RecipeList(innerPadding: PaddingValues) {
                 .padding(16.dp)
         ) {
             Text(
-                text = "Weekly Meal Planner",
+                text = "Planificador Semanal de Comidas",
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
