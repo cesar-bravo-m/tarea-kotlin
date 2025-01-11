@@ -5,6 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -14,7 +17,10 @@ import com.example.myapplication.ui.session.LoginScreen
 import com.example.myapplication.ui.session.RecoveryDialog
 import com.example.myapplication.ui.session.RegisterScreen
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import com.example.myapplication.ui.navigation.Destination
+import com.example.myapplication.ui.profile.ProfileScreen
 
+@OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,48 +33,90 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
-    val (showRecoveryDialog, setShowRecoveryDialog) = remember { mutableStateOf(false) }
-    val (showRegister, setShowRegister) = remember { mutableStateOf(false) }
-    val (recoveryStep, setRecoveryStep) = remember { mutableIntStateOf(1) }
-    val (email, setEmail) = remember { mutableStateOf("") }
-    val (verificationCode, setVerificationCode) = remember { mutableStateOf("") }
-    val (isLoggedIn, setIsLoggedIn) = remember { mutableStateOf(false) }
-    val context = LocalContext.current
+    var isLoggedIn by remember { mutableStateOf(false) }
+    var currentDestination by remember { mutableStateOf(Destination.RECIPES) }
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        if (isLoggedIn) {
-            RecipeList(innerPadding)
-        } else if (showRegister) {
+    if (!isLoggedIn) {
+        var showRegister by remember { mutableStateOf(false) }
+        var showRecoveryDialog by remember { mutableStateOf(false) }
+        var recoveryStep by remember { mutableStateOf(1) }
+        var email by remember { mutableStateOf("") }
+        var verificationCode by remember { mutableStateOf("") }
+
+        if (showRegister) {
             RegisterScreen(
-                innerPadding,
-                setIsLoggedIn,
-                setShowRegister,
-                context
+                innerPadding = PaddingValues(),
+                setIsLoggedIn = { isLoggedIn = it },
+                setShowRegister = { showRegister = it },
+                context = LocalContext.current
             )
-        } else if (!isLoggedIn && !showRecoveryDialog) {
+        } else {
             LoginScreen(
-                innerPadding,
-                setShowRecoveryDialog,
-                setRecoveryStep,
-                setEmail,
-                setVerificationCode,
-                setIsLoggedIn,
-                setShowRegister,
-                context
+                innerPadding = PaddingValues(),
+                setShowRecoveryDialog = { showRecoveryDialog = it },
+                setRecoveryStep = { recoveryStep = it },
+                setEmail = { email = it },
+                setVerificationCode = { verificationCode = it },
+                setIsLoggedIn = { isLoggedIn = it },
+                setShowRegister = { showRegister = it },
+                context = LocalContext.current
             )
-        } else if (!isLoggedIn && showRecoveryDialog) {
+        }
+
+        if (showRecoveryDialog) {
             RecoveryDialog(
-                setShowRecoveryDialog,
-                setRecoveryStep,
-                recoveryStep,
-                email,
-                setEmail,
-                verificationCode,
-                setVerificationCode,
-                context
+                setShowRecoveryDialog = { showRecoveryDialog = false },
+                recoveryStep = recoveryStep,
+                setRecoveryStep = { recoveryStep = it },
+                email = email,
+                setEmail = { email = it },
+                verificationCode = verificationCode,
+                setVerificationCode = { verificationCode = it },
+                context = LocalContext.current
             )
+        }
+    } else {
+        Scaffold(
+            bottomBar = {
+                NavigationBar {
+                    NavigationBarItem(
+                        selected = currentDestination == Destination.RECIPES,
+                        onClick = { currentDestination = Destination.RECIPES },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Default.Home,
+                                contentDescription = "Recetas"
+                            )
+                        },
+                        label = { Text("Recetas") }
+                    )
+                    NavigationBarItem(
+                        selected = currentDestination == Destination.PROFILE,
+                        onClick = { currentDestination = Destination.PROFILE },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Default.Person,
+                                contentDescription = "Perfil"
+                            )
+                        },
+                        label = { Text("Perfil") }
+                    )
+                }
+            }
+        ) { scaffoldPadding ->
+            when (currentDestination) {
+                Destination.RECIPES -> RecipeList(
+                    innerPadding = scaffoldPadding
+                )
+                Destination.PROFILE -> ProfileScreen(
+                    innerPadding = scaffoldPadding,
+                    context = LocalContext.current,
+                    onLogout = { isLoggedIn = false }
+                )
+            }
         }
     }
 }

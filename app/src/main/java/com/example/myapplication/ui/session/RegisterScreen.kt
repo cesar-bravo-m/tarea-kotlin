@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
 import com.example.myapplication.business.UserManager
+import com.example.myapplication.ui.components.AvatarPicker
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -187,68 +188,6 @@ fun RegisterScreen(
             onClick = { setShowRegister(false) }
         ) {
             Text("¿Ya tienes una cuenta? Inicia sesión")
-        }
-    }
-}
-
-@Composable
-private fun AvatarPicker(
-    selectedAvatar: Int,
-    onAvatarSelected: (Int) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 16.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        val avatars = listOf(
-            R.drawable.female1,
-            R.drawable.female2,
-            R.drawable.male1,
-            R.drawable.male2
-        )
-
-        avatars.forEach { avatar ->
-            Box(
-                modifier = Modifier
-                    .size(64.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surface)
-                    .border(
-                        width = 3.dp,
-                        color = if (selectedAvatar == avatar)
-                            Color(0xFF4CAF50)
-                        else
-                            MaterialTheme.colorScheme.outline,
-                        shape = CircleShape
-                    )
-                    .clickable { onAvatarSelected(avatar) }
-            ) {
-                Image(
-                    painter = painterResource(id = avatar),
-                    contentDescription = "Avatar option",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-
-                if (selectedAvatar == avatar) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color(0x77000000)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = "Selected",
-                            tint = Color.White,
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
-                }
-            }
         }
     }
 } 
