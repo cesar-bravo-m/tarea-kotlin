@@ -2,12 +2,12 @@ package com.example.myapplication.ui.session
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -20,9 +20,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.R
 import com.example.myapplication.business.UserManager
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Icon
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 
 @Composable
 fun RegisterScreen(
@@ -31,10 +39,11 @@ fun RegisterScreen(
     setShowRegister: (Boolean) -> Unit,
     context: Context
 ) {
-    var username by remember { mutableStateOf("") }
+    var fullName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+    var selectedAvatar by remember { mutableStateOf(R.drawable.male1) }
 
     Column(
         modifier = Modifier
@@ -51,9 +60,9 @@ fun RegisterScreen(
         )
 
         OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
-            label = { Text("Nombre de usuario") },
+            value = fullName,
+            onValueChange = { fullName = it },
+            label = { Text("Nombre completo") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
@@ -88,9 +97,72 @@ fun RegisterScreen(
                 .padding(bottom = 16.dp)
         )
 
+        Text(
+            text = "Elige tu avatar",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            val avatars = listOf(
+                R.drawable.female1,
+                R.drawable.female2,
+                R.drawable.male1,
+                R.drawable.male2
+            )
+
+            avatars.forEach { avatar ->
+                Box(
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surface)
+                        .border(
+                            width = 3.dp,
+                            color = if (selectedAvatar == avatar)
+                                Color(0xFF4CAF50) // Material Green
+                            else
+                                MaterialTheme.colorScheme.outline,
+                            shape = CircleShape
+                        )
+                        .clickable { selectedAvatar = avatar }
+                ) {
+                    Image(
+                        painter = painterResource(id = avatar),
+                        contentDescription = "Avatar option",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+
+                    if (selectedAvatar == avatar) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color(0x77000000)), // Semi-transparent black overlay
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = "Selected",
+                                tint = Color.White,
+                                modifier = Modifier.size(32.dp)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+
         Button(
             onClick = {
-                if (username.isBlank() || email.isBlank() || password.isBlank()) {
+                if (fullName.isBlank() || email.isBlank() || password.isBlank()) {
                     Toast.makeText(context, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
@@ -102,11 +174,11 @@ fun RegisterScreen(
                     Toast.makeText(context, "Email inválido", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
-                if (UserManager.register(username, password, email)) {
+                if (UserManager.register(email, password, fullName, selectedAvatar)) {
                     Toast.makeText(context, "¡Registro exitoso!", Toast.LENGTH_SHORT).show()
                     setIsLoggedIn(true)
                 } else {
-                    Toast.makeText(context, "El usuario o email ya existe", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "El email ya existe", Toast.LENGTH_SHORT).show()
                 }
             },
             modifier = Modifier

@@ -22,7 +22,7 @@ import com.example.myapplication.business.UserManager
 
 @Composable
 fun UserCard(
-    setUsername: (String) -> Unit,
+    setEmail: (String) -> Unit,
     setPassword: (String) -> Unit,
     selectedProfile: String,
     setSelectedProfile: (String) -> Unit,
@@ -43,7 +43,7 @@ fun UserCard(
             )
         ) {
             items(previousUsers) { user ->
-                UserAvatar(user, setUsername, setPassword, selectedProfile, setSelectedProfile)
+                UserAvatar(user, setEmail, setPassword, selectedProfile, setSelectedProfile)
             }
         }
     }
@@ -52,21 +52,21 @@ fun UserCard(
 @Composable
 private fun UserAvatar(
     user: User,
-    setUsername: (String) -> Unit,
+    setEmail: (String) -> Unit,
     setPassword: (String) -> Unit,
     selectedProfile: String,
     setSelectedProfile: (String) -> Unit,
 ) {
-    val isSelected = user.username == selectedProfile
+    val isSelected = user.email == selectedProfile
     
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
             .clickable {
-                setUsername(user.username)
+                setEmail(user.email)
                 setPassword("admin")
-                setSelectedProfile(user.username)
+                setSelectedProfile(user.email)
             },
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (isSelected) 8.dp else 2.dp
@@ -103,7 +103,7 @@ private fun UserAvatar(
                     )
                 } else {
                     Text(
-                        text = user.username.first().uppercase(),
+                        text = user.fullName.first().uppercase(),
                         color = MaterialTheme.colorScheme.onPrimary,
                         style = MaterialTheme.typography.titleLarge
                     )
@@ -112,7 +112,6 @@ private fun UserAvatar(
             
             Spacer(modifier = Modifier.width(16.dp))
             
-            // Username
             Text(
                 text = user.fullName,
                 style = MaterialTheme.typography.titleMedium,

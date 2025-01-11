@@ -36,7 +36,7 @@ fun LoginScreen(
     setShowRegister: (Boolean) -> Unit,
     context: Context,
 ) {
-    val (username, setUsername) = remember { mutableStateOf("") }
+    val (email, setEmail) = remember { mutableStateOf("") }
     val (password, setPassword) = remember { mutableStateOf("") }
     val (selectedProfile, setSelectedProfile) = remember { mutableStateOf("") }
     Column(
@@ -54,43 +54,24 @@ fun LoginScreen(
         )
 
         UserCard(
-            setUsername = setUsername,
+            setEmail = setEmail,
             setPassword = setPassword,
             selectedProfile = selectedProfile,
             setSelectedProfile = setSelectedProfile,
         )
 
-        // OutlinedTextField(
-        //     value = username,
-        //     onValueChange = { username = it },
-        //     label = { Text("Nombre de usuario") },
-        //     modifier = Modifier
-        //         .fillMaxWidth()
-        //         .padding(bottom = 16.dp)
-        // )
-
-        // OutlinedTextField(
-        //     value = password,
-        //     onValueChange = { password = it },
-        //     label = { Text("Contraseña") },
-        //     visualTransformation = PasswordVisualTransformation(),
-        //     modifier = Modifier
-        //         .fillMaxWidth()
-        //         .padding(bottom = 16.dp)
-        // )
-
         Button(
             onClick = {
-                if (username.isBlank() || password.isBlank()) {
+                if (email.isBlank() || password.isBlank()) {
                     Toast.makeText(context, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
                 
-                if (UserManager.authenticate(username, password)) {
+                if (UserManager.authenticate(email, password)) {
                     Toast.makeText(context, "¡Inicio de sesión exitoso!", Toast.LENGTH_SHORT).show()
                     setIsLoggedIn(true)
                 } else {
-                    Toast.makeText(context, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Email o contraseña incorrectos", Toast.LENGTH_SHORT).show()
                 }
             },
             modifier = Modifier

@@ -3,9 +3,8 @@ package com.example.myapplication.business
 import com.example.myapplication.R
 
 data class User(
-    val username: String,
-    var password: String,
     val email: String,
+    var password: String,
     val fullName: String,
     val avatar: Int? = null,
 )
@@ -13,17 +12,15 @@ data class User(
 object UserManager {
     private val users = mutableListOf(
         User(
-            username="antonia",
+            email="antonia@example.com",
             password="admin",
-            email="admin@example.com",
             fullName="Antonia Molina",
             avatar=R.drawable.female1
         ),
         User(
-            username="cecy",
+            email="cecy@example.com",
             password="admin",
             fullName="Cecy Molina",
-            email="admin@example.com",
             avatar=R.drawable.female2
         ),
     )
@@ -32,20 +29,19 @@ object UserManager {
         return users
     }
 
-    fun authenticate(username: String, password: String): Boolean {
-        return users.any { it.username == username && it.password == password }
+    fun authenticate(email: String, password: String): Boolean {
+        return users.any { it.email == email && it.password == password }
     }
 
-    fun register(username: String, password: String, email: String): Boolean {
-        if (users.any { it.username == username || it.email == email }) {
+    fun register(email: String, password: String, fullName: String, avatar: Int): Boolean {
+        if (users.any { it.email == email }) {
             return false
         }
         users.add(User(
-            username=username,
-            password=password,
-            fullName="",
             email=email,
-            avatar=R.drawable.male1
+            password=password,
+            fullName=fullName,
+            avatar=avatar
         ))
         return true
     }
@@ -61,9 +57,5 @@ object UserManager {
 
     fun verifyEmail(email: String): Boolean {
         return users.any { it.email == email }
-    }
-
-    fun getUsername(email: String): String? {
-        return users.find { it.email == email }?.username
     }
 } 
