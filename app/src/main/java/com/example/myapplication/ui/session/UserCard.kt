@@ -1,5 +1,7 @@
 package com.example.myapplication.ui.session
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,6 +14,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,6 +25,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.business.User
 import com.example.myapplication.business.UserManager
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 
 @Composable
 fun UserCard(
@@ -26,8 +38,12 @@ fun UserCard(
     setPassword: (String) -> Unit,
     selectedProfile: String,
     setSelectedProfile: (String) -> Unit,
+    setIsLoggedIn: (Boolean) -> Unit,
+    context: Context
 ) {
-    val previousUsers = UserManager.getUsersWhoPreviouslyHaveLoggedIn()
+    var previousUsers by remember { mutableStateOf(UserManager.getUsersWhoPreviouslyHaveLoggedIn()) }
+    var showPasswordDialog by remember { mutableStateOf(false) }
+    var selectedUser by remember { mutableStateOf<User?>(null) }
     
     if (previousUsers.isNotEmpty()) {
         LazyColumn(
@@ -43,9 +59,47 @@ fun UserCard(
             )
         ) {
             items(previousUsers) { user ->
-                UserAvatar(user, setEmail, setPassword, selectedProfile, setSelectedProfile)
+                UserAvatar(
+                    user = user,
+                    setEmail = setEmail,
+                    setPassword = setPassword,
+                    selectedProfile = selectedProfile,
+                    setSelectedProfile = setSelectedProfile,
+                    onCardClick = {
+                        selectedUser = user
+                        showPasswordDialog = true
+                    },
+                    onRemoveProfile = {
+                        UserManager.removeFromUsersWhoHavePreviouslyLoggedIn(user.email)
+                        previousUsers = UserManager.getUsersWhoPreviouslyHaveLoggedIn()
+                        if (selectedProfile == user.email) {
+                            setSelectedProfile("")
+                        }
+                    }
+                )
             }
         }
+    }
+
+    if (showPasswordDialog && selectedUser != null) {
+        PasswordDialog(
+            email = selectedUser!!.email,
+            onDismiss = { 
+                showPasswordDialog = false
+                selectedUser = null
+                setSelectedProfile("")
+            },
+            onConfirm = { password ->
+                if (UserManager.authenticate(selectedUser!!.email, password)) {
+                    setIsLoggedIn(true)
+                    Toast.makeText(context, "¡Inicio de sesión exitoso!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Contraseña incorrecta", Toast.LENGTH_SHORT).show()
+                }
+                showPasswordDialog = false
+                selectedUser = null
+            }
+        )
     }
 }
 
@@ -56,7 +110,10 @@ private fun UserAvatar(
     setPassword: (String) -> Unit,
     selectedProfile: String,
     setSelectedProfile: (String) -> Unit,
+    onCardClick: () -> Unit,
+    onRemoveProfile: () -> Unit
 ) {
+    var showMenu by remember { mutableStateOf(false) }
     val isSelected = user.email == selectedProfile
     
     Card(
@@ -65,8 +122,8 @@ private fun UserAvatar(
             .padding(vertical = 4.dp)
             .clickable {
                 setEmail(user.email)
-                setPassword("admin")
                 setSelectedProfile(user.email)
+                onCardClick()
             },
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (isSelected) 8.dp else 2.dp
@@ -117,6 +174,28 @@ private fun UserAvatar(
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.weight(1f)
             )
+
+            Box {
+                IconButton(onClick = { showMenu = true }) {
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = "Más opciones"
+                    )
+                }
+
+                DropdownMenu(
+                    expanded = showMenu,
+                    onDismissRequest = { showMenu = false }
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("Quitar perfil") },
+                        onClick = {
+                            onRemoveProfile()
+                            showMenu = false
+                        }
+                    )
+                }
+            }
         }
     }
 }

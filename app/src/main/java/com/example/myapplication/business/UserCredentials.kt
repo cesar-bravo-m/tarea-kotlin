@@ -25,12 +25,26 @@ object UserManager {
         ),
     )
 
+    // Lista de correos de los usuarios que han iniciado sesión en este teléfono
+    private val usersWhoHavePreviouslyLoggedIn = mutableListOf<String>(
+        "antonia@example.com",
+        "cecy@example.com",
+    )
+
     fun getUsersWhoPreviouslyHaveLoggedIn(): List<User> {
-        return users
+        return users.filter { usersWhoHavePreviouslyLoggedIn.contains(it.email) }
+    }
+
+    fun removeFromUsersWhoHavePreviouslyLoggedIn(email: String): Unit {
+        usersWhoHavePreviouslyLoggedIn.remove(email)
     }
 
     fun authenticate(email: String, password: String): Boolean {
-        return users.any { it.email == email && it.password == password }
+        val valid = users.any { it.email == email && it.password == password }
+        if (valid && !usersWhoHavePreviouslyLoggedIn.contains(email)) {
+            usersWhoHavePreviouslyLoggedIn.add(email)
+        }
+        return valid
     }
 
     fun register(email: String, password: String, fullName: String, avatar: Int): Boolean {
@@ -43,6 +57,7 @@ object UserManager {
             fullName=fullName,
             avatar=avatar
         ))
+        usersWhoHavePreviouslyLoggedIn.add(email)
         return true
     }
 

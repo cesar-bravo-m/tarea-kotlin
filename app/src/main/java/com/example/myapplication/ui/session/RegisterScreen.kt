@@ -2,36 +2,31 @@ package com.example.myapplication.ui.session
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
 import com.example.myapplication.business.UserManager
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.Icon
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun RegisterScreen(
     innerPadding: PaddingValues,
@@ -43,7 +38,8 @@ fun RegisterScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-    var selectedAvatar by remember { mutableStateOf(R.drawable.male1) }
+    var selectedAvatar by remember { mutableStateOf(R.drawable.female1) }
+    var currentStep by remember { mutableStateOf(1) }
 
     Column(
         modifier = Modifier
@@ -51,147 +47,208 @@ fun RegisterScreen(
             .padding(innerPadding)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        Text(
-            text = "Crear cuenta",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 32.dp)
-        )
-
-        OutlinedTextField(
-            value = fullName,
-            onValueChange = { fullName = it },
-            label = { Text("Nombre completo") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        )
-
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        )
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Contraseña") },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        )
-
-        OutlinedTextField(
-            value = confirmPassword,
-            onValueChange = { confirmPassword = it },
-            label = { Text("Confirmar contraseña") },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        )
-
-        Text(
-            text = "Elige tu avatar",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val avatars = listOf(
-                R.drawable.female1,
-                R.drawable.female2,
-                R.drawable.male1,
-                R.drawable.male2
-            )
-
-            avatars.forEach { avatar ->
-                Box(
-                    modifier = Modifier
-                        .size(64.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surface)
-                        .border(
-                            width = 3.dp,
-                            color = if (selectedAvatar == avatar)
-                                Color(0xFF4CAF50) // Material Green
-                            else
-                                MaterialTheme.colorScheme.outline,
-                            shape = CircleShape
-                        )
-                        .clickable { selectedAvatar = avatar }
-                ) {
-                    Image(
-                        painter = painterResource(id = avatar),
-                        contentDescription = "Avatar option",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-
-                    if (selectedAvatar == avatar) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(Color(0x77000000)), // Semi-transparent black overlay
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Check,
-                                contentDescription = "Selected",
-                                tint = Color.White,
-                                modifier = Modifier.size(32.dp)
-                            )
-                        }
-                    }
+        if (currentStep > 1) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = { currentStep-- }) {
+                    Icon(Icons.Default.ArrowBack, "Volver")
                 }
             }
         }
 
+        LinearProgressIndicator(
+            progress = currentStep / 3f,
+            modifier = Modifier.fillMaxWidth()
+        )
 
-        Button(
-            onClick = {
-                if (fullName.isBlank() || email.isBlank() || password.isBlank()) {
-                    Toast.makeText(context, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
-                    return@Button
+        Spacer(modifier = Modifier.height(16.dp))
+
+        AnimatedContent(
+            targetState = currentStep,
+            transitionSpec = {
+                slideInHorizontally { width -> width } with
+                slideOutHorizontally { width -> -width }
+            }
+        ) { step ->
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                when (step) {
+                    1 -> {
+                        Text(
+                            text = "¿Cómo quires que te llamemos?",
+                            style = MaterialTheme.typography.headlineSmall,
+                            textAlign = TextAlign.Center
+                        )
+                        OutlinedTextField(
+                            value = fullName,
+                            onValueChange = { fullName = it },
+                            label = { Text("Nombre o apodo") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        
+                        Text(
+                            text = "Elige un avatar",
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.padding(top = 16.dp)
+                        )
+                        AvatarPicker(
+                            selectedAvatar = selectedAvatar,
+                            onAvatarSelected = { selectedAvatar = it }
+                        )
+                    }
+                    2 -> {
+                        Text(
+                            text = "¿Cuál es tu email?",
+                            style = MaterialTheme.typography.headlineSmall,
+                            textAlign = TextAlign.Center
+                        )
+                        OutlinedTextField(
+                            value = email,
+                            onValueChange = { email = it },
+                            label = { Text("Email") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                    3 -> {
+                        Text(
+                            text = "Elige una contraseña",
+                            style = MaterialTheme.typography.headlineSmall,
+                            textAlign = TextAlign.Center
+                        )
+                        OutlinedTextField(
+                            value = password,
+                            onValueChange = { password = it },
+                            label = { Text("Contraseña") },
+                            visualTransformation = PasswordVisualTransformation(),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        OutlinedTextField(
+                            value = confirmPassword,
+                            onValueChange = { confirmPassword = it },
+                            label = { Text("Confirmar contraseña") },
+                            visualTransformation = PasswordVisualTransformation(),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
-                if (password != confirmPassword) {
-                    Toast.makeText(context, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
-                    return@Button
+
+                Button(
+                    onClick = {
+                        when (currentStep) {
+                            1 -> {
+                                if (fullName.isBlank()) {
+                                    Toast.makeText(context, "Por favor, ingresa tu nombre", Toast.LENGTH_SHORT).show()
+                                    return@Button
+                                }
+                                currentStep++
+                            }
+                            2 -> {
+                                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                                    Toast.makeText(context, "Email inválido", Toast.LENGTH_SHORT).show()
+                                    return@Button
+                                }
+                                currentStep++
+                            }
+                            3 -> {
+                                if (password.isBlank()) {
+                                    Toast.makeText(context, "Por favor, ingresa una contraseña", Toast.LENGTH_SHORT).show()
+                                    return@Button
+                                }
+                                if (password != confirmPassword) {
+                                    Toast.makeText(context, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+                                    return@Button
+                                }
+                                if (UserManager.register(email, password, fullName, selectedAvatar)) {
+                                    Toast.makeText(context, "¡Registro exitoso! Inicia sesión con tu contraseña", Toast.LENGTH_SHORT).show()
+                                    setShowRegister(false)
+                                } else {
+                                    Toast.makeText(context, "El email ya existe", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(if (currentStep < 3) "Siguiente" else "Crear cuenta")
                 }
-                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    Toast.makeText(context, "Email inválido", Toast.LENGTH_SHORT).show()
-                    return@Button
-                }
-                if (UserManager.register(email, password, fullName, selectedAvatar)) {
-                    Toast.makeText(context, "¡Registro exitoso!", Toast.LENGTH_SHORT).show()
-                    setIsLoggedIn(true)
-                } else {
-                    Toast.makeText(context, "El email ya existe", Toast.LENGTH_SHORT).show()
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        ) {
-            Text("Crear cuenta")
+            }
         }
+
+        Spacer(modifier = Modifier.weight(1f))
 
         TextButton(
             onClick = { setShowRegister(false) }
         ) {
             Text("¿Ya tienes una cuenta? Inicia sesión")
+        }
+    }
+}
+
+@Composable
+private fun AvatarPicker(
+    selectedAvatar: Int,
+    onAvatarSelected: (Int) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        val avatars = listOf(
+            R.drawable.female1,
+            R.drawable.female2,
+            R.drawable.male1,
+            R.drawable.male2
+        )
+
+        avatars.forEach { avatar ->
+            Box(
+                modifier = Modifier
+                    .size(64.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.surface)
+                    .border(
+                        width = 3.dp,
+                        color = if (selectedAvatar == avatar)
+                            Color(0xFF4CAF50)
+                        else
+                            MaterialTheme.colorScheme.outline,
+                        shape = CircleShape
+                    )
+                    .clickable { onAvatarSelected(avatar) }
+            ) {
+                Image(
+                    painter = painterResource(id = avatar),
+                    contentDescription = "Avatar option",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+
+                if (selectedAvatar == avatar) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color(0x77000000)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = "Selected",
+                            tint = Color.White,
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+                }
+            }
         }
     }
 } 

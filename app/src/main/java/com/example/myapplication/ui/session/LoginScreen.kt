@@ -58,34 +58,25 @@ fun LoginScreen(
             setPassword = setPassword,
             selectedProfile = selectedProfile,
             setSelectedProfile = setSelectedProfile,
+            setIsLoggedIn = setIsLoggedIn,
+            context = context
         )
 
         Button(
-            onClick = {
-                if (email.isBlank() || password.isBlank()) {
-                    Toast.makeText(context, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
-                    return@Button
-                }
-                
-                if (UserManager.authenticate(email, password)) {
-                    Toast.makeText(context, "¡Inicio de sesión exitoso!", Toast.LENGTH_SHORT).show()
-                    setIsLoggedIn(true)
-                } else {
-                    Toast.makeText(context, "Email o contraseña incorrectos", Toast.LENGTH_SHORT).show()
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        ) {
-            Text("Iniciar sesión")
-        }
-
-        TextButton(
+            modifier = Modifier.fillMaxWidth(),
             onClick = { setShowRegister(true) }
         ) {
-            Text("¿No tienes cuenta? Regístrate")
+            Text("Crear cuenta")
         }
+        // if (UserManager.getUsersWhoPreviouslyHaveLoggedIn().isEmpty()) {
+        // } else {
+        //     TextButton(
+        //         onClick = { setShowRegister(true) }
+        //     ) {
+        //         Text("¿No tienes cuenta? Regístrate")
+        //     }
+        // }
+
 
         TextButton(
             onClick = {
