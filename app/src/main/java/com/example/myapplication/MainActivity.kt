@@ -88,7 +88,7 @@ fun App() {
                         icon = {
                             Icon(
                                 imageVector = Icons.Default.Home,
-                                contentDescription = "Recetas"
+                                contentDescription = "Planificador"
                             )
                         },
                         label = { Text("Recetas") }

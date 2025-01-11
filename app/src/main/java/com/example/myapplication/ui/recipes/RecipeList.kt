@@ -277,7 +277,7 @@ fun RecipeList(innerPadding: PaddingValues) {
                 .padding(16.dp)
         ) {
             Text(
-                text = "Planificador Semanal de Comidas",
+                text = "Planificador Semanal",
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
