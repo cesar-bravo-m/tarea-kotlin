@@ -2,12 +2,14 @@ package com.example.myapplication.ui.session
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -21,8 +23,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
 import com.example.myapplication.business.UserManager
 
 @Composable
@@ -47,11 +52,17 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = "Sabor Diario",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 32.dp)
+        Image(
+            painter = painterResource(id = R.drawable.logo),
+            contentDescription = "Logo",
+            modifier = Modifier
+                .size(240.dp)
         )
+        //Text(
+        //    text = "Sabor Diario",
+        //    style = MaterialTheme.typography.headlineMedium,
+        //    modifier = Modifier.padding(bottom = 32.dp)
+        //)
 
         UserCard(
             setEmail = setEmail,
@@ -66,7 +77,7 @@ fun LoginScreen(
             modifier = Modifier.fillMaxWidth(),
             onClick = { setShowRegister(true) }
         ) {
-            Text("Crear cuenta")
+            Text(text="Crear cuenta", fontSize=18.sp)
         }
         // if (UserManager.getUsersWhoPreviouslyHaveLoggedIn().isEmpty()) {
         // } else {
@@ -86,7 +97,7 @@ fun LoginScreen(
                 setVerificationCode("")
             }
         ) {
-            Text("Recuperar contraseña")
+            Text("Recuperar contraseña", fontSize=18.sp)
         }
     }
 }

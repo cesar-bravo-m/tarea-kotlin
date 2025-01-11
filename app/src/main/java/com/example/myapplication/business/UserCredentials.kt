@@ -10,20 +10,19 @@ data class User(
 )
 
 object UserManager {
-    private val users = mutableListOf(
-        User(
-            email="antonia@example.com",
-            password="admin",
-            fullName="Antonia Molina",
-            avatar=R.drawable.female1
-        ),
-        User(
-            email="cecy@example.com",
-            password="admin",
-            fullName="Cecy Molina",
-            avatar=R.drawable.female2
-        ),
-    )
+    private val users = mutableListOf<User>()
+        // User(
+        //     email="antonia@example.com",
+        //     password="admin",
+        //     fullName="Antonia Molina",
+        //     avatar=R.drawable.female1
+        // ),
+        // User(
+        //     email="cecy@example.com",
+        //     password="admin",
+        //     fullName="Cecy Molina",
+        //     avatar=R.drawable.female2
+        // ),
 
     // Lista de correos de los usuarios que han iniciado sesión en este teléfono
     private val usersWhoHavePreviouslyLoggedIn = mutableListOf<String>(
