@@ -136,19 +136,10 @@ fun RecipeGridItem(
                 modifier = Modifier.weight(0.25f)
             )
 
-            Surface(
-                color = MaterialTheme.colorScheme.primaryContainer,
-                shape = MaterialTheme.shapes.medium,
+            StarRating(
+                score = recipe.nutritionalScore,
                 modifier = Modifier.weight(0.15f)
-            ) {
-                Text(
-                    text = "Puntuación: ${recipe.nutritionalScore}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    fontWeight = FontWeight.Medium
-                )
-            }
+            )
         }
     }
 } 

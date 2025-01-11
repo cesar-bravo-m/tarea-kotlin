@@ -101,18 +101,7 @@ fun DayRecipeCard(
                         )
                     }
                     if (selectedRecipe != null) {
-                        Surface(
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                            shape = MaterialTheme.shapes.medium,
-                        ) {
-                            Text(
-                                text = "Puntuación: ${selectedRecipe.nutritionalScore}",
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                fontWeight = FontWeight.Medium
-                            )
-                        }
+                        StarRating(score = selectedRecipe.nutritionalScore)
                     }
                 }
 
