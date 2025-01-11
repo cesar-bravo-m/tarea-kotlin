@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -35,8 +36,8 @@ fun LoginScreen(
     setShowRegister: (Boolean) -> Unit,
     context: Context
 ) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    val (username, setUsername) = remember { mutableStateOf("") }
+    val (password, setPassword) = remember { mutableStateOf("") }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,24 +52,30 @@ fun LoginScreen(
             modifier = Modifier.padding(bottom = 32.dp)
         )
 
-        OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
-            label = { Text("Nombre de usuario") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
+        UserCard(
+            setUsername = setUsername,
+            setPassword = setPassword,
         )
 
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Contraseña") },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        )
+        // OutlinedTextField(
+        //     value = username,
+        //     onValueChange = { username = it },
+        //     label = { Text("Nombre de usuario") },
+        //     modifier = Modifier
+        //         .fillMaxWidth()
+        //         .padding(bottom = 16.dp)
+        // )
+
+        // OutlinedTextField(
+        //     value = password,
+        //     onValueChange = { password = it },
+        //     label = { Text("Contraseña") },
+        //     visualTransformation = PasswordVisualTransformation(),
+        //     modifier = Modifier
+        //         .fillMaxWidth()
+        //         .padding(bottom = 16.dp)
+        // )
+
         Button(
             onClick = {
                 if (username.isBlank() || password.isBlank()) {

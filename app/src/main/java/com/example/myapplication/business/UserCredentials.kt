@@ -3,13 +3,24 @@ package com.example.myapplication.business
 data class User(
     val username: String,
     var password: String,
-    val email: String
+    val email: String,
 )
 
 object UserManager {
     private val users = mutableListOf(
-        User("admin", "admin", "admin@example.com")
+        User(
+            username="antonia",
+            password="admin",
+            email="admin@example.com"),
+        User(
+            username="cecy",
+            password="admin",
+            email="admin@example.com"),
     )
+
+    fun getUsersWhoPreviouslyHaveLoggedIn(): List<User> {
+        return users
+    }
 
     fun authenticate(username: String, password: String): Boolean {
         return users.any { it.username == username && it.password == password }
