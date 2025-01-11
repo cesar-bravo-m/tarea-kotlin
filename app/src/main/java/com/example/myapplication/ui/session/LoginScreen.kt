@@ -34,10 +34,11 @@ fun LoginScreen(
     setVerificationCode: (String) -> Unit,
     setIsLoggedIn: (Boolean) -> Unit,
     setShowRegister: (Boolean) -> Unit,
-    context: Context
+    context: Context,
 ) {
     val (username, setUsername) = remember { mutableStateOf("") }
     val (password, setPassword) = remember { mutableStateOf("") }
+    val (selectedProfile, setSelectedProfile) = remember { mutableStateOf("") }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,6 +56,8 @@ fun LoginScreen(
         UserCard(
             setUsername = setUsername,
             setPassword = setPassword,
+            selectedProfile = selectedProfile,
+            setSelectedProfile = setSelectedProfile,
         )
 
         // OutlinedTextField(

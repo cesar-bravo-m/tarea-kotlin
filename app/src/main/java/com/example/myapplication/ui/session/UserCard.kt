@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.session
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.business.User
 import com.example.myapplication.business.UserManager
@@ -23,6 +24,8 @@ import com.example.myapplication.business.UserManager
 fun UserCard(
     setUsername: (String) -> Unit,
     setPassword: (String) -> Unit,
+    selectedProfile: String,
+    setSelectedProfile: (String) -> Unit,
 ) {
     val previousUsers = UserManager.getUsersWhoPreviouslyHaveLoggedIn()
     
@@ -40,7 +43,7 @@ fun UserCard(
             )
         ) {
             items(previousUsers) { user ->
-                UserAvatar(user, setUsername, setPassword)
+                UserAvatar(user, setUsername, setPassword, selectedProfile, setSelectedProfile)
             }
         }
     }
@@ -51,8 +54,11 @@ private fun UserAvatar(
     user: User,
     setUsername: (String) -> Unit,
     setPassword: (String) -> Unit,
+    selectedProfile: String,
+    setSelectedProfile: (String) -> Unit,
 ) {
-    // TODO: If selected, highlight the card
+    val isSelected = user.username == selectedProfile
+    
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -60,8 +66,21 @@ private fun UserAvatar(
             .clickable {
                 setUsername(user.username)
                 setPassword("admin")
+                setSelectedProfile(user.username)
             },
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = if (isSelected) 8.dp else 2.dp
+        ),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isSelected) 
+                MaterialTheme.colorScheme.primaryContainer 
+            else 
+                MaterialTheme.colorScheme.surface,
+            contentColor = if (isSelected) 
+                MaterialTheme.colorScheme.onPrimaryContainer 
+            else 
+                MaterialTheme.colorScheme.onSurface,
+        )
     ) {
         Row(
             modifier = Modifier
@@ -69,7 +88,6 @@ private fun UserAvatar(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Avatar circle with first letter of username
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -77,18 +95,26 @@ private fun UserAvatar(
                     .background(MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = user.username.first().uppercase(),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.titleLarge
-                )
+                if (user.avatar != null) {
+                    Image(
+                        painter= painterResource(id=user.avatar),
+                        contentDescription="Avatar",
+                        modifier=Modifier.fillMaxSize(),
+                    )
+                } else {
+                    Text(
+                        text = user.username.first().uppercase(),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                }
             }
             
             Spacer(modifier = Modifier.width(16.dp))
             
             // Username
             Text(
-                text = user.username,
+                text = user.fullName,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.weight(1f)
             )

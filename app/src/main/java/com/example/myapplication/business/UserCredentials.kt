@@ -1,9 +1,13 @@
 package com.example.myapplication.business
 
+import com.example.myapplication.R
+
 data class User(
     val username: String,
     var password: String,
     val email: String,
+    val fullName: String,
+    val avatar: Int? = null,
 )
 
 object UserManager {
@@ -11,11 +15,17 @@ object UserManager {
         User(
             username="antonia",
             password="admin",
-            email="admin@example.com"),
+            email="admin@example.com",
+            fullName="Antonia Molina",
+            avatar=R.drawable.female1
+        ),
         User(
             username="cecy",
             password="admin",
-            email="admin@example.com"),
+            fullName="Cecy Molina",
+            email="admin@example.com",
+            avatar=R.drawable.female2
+        ),
     )
 
     fun getUsersWhoPreviouslyHaveLoggedIn(): List<User> {
@@ -30,7 +40,13 @@ object UserManager {
         if (users.any { it.username == username || it.email == email }) {
             return false
         }
-        users.add(User(username, password, email))
+        users.add(User(
+            username=username,
+            password=password,
+            fullName="",
+            email=email,
+            avatar=R.drawable.male1
+        ))
         return true
     }
 
