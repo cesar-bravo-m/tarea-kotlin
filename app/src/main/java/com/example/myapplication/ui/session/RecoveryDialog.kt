@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.ui.session
 
 import android.content.Context
 import android.widget.Toast
@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.myapplication.UserManager
 
 @Composable
 fun RecoveryDialog(

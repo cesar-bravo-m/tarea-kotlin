@@ -9,6 +9,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.example.myapplication.ui.recipes.RecipeList
+import com.example.myapplication.ui.session.LoginScreen
+import com.example.myapplication.ui.session.RecoveryDialog
+import com.example.myapplication.ui.session.RegisterScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

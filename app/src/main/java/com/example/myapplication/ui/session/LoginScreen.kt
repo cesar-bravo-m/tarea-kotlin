@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.ui.session
 
 import android.content.Context
 import android.widget.Toast
@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.UserManager
 
 @Composable
 fun LoginScreen(
