@@ -2,6 +2,14 @@ package com.example.myapplication.ui.session
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,24 +19,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
-import com.example.myapplication.business.UserManager
 
 @Composable
 fun LoginScreen(
@@ -39,6 +40,7 @@ fun LoginScreen(
     setVerificationCode: (String) -> Unit,
     setIsLoggedIn: (Boolean) -> Unit,
     setShowRegister: (Boolean) -> Unit,
+    showRegister: Boolean,
     context: Context,
 ) {
     val (email, setEmail) = remember { mutableStateOf("") }
@@ -58,11 +60,6 @@ fun LoginScreen(
             modifier = Modifier
                 .size(240.dp)
         )
-        //Text(
-        //    text = "Sabor Diario",
-        //    style = MaterialTheme.typography.headlineMedium,
-        //    modifier = Modifier.padding(bottom = 32.dp)
-        //)
 
         UserCard(
             setEmail = setEmail,
@@ -79,15 +76,6 @@ fun LoginScreen(
         ) {
             Text(text="Crear cuenta", fontSize=18.sp)
         }
-        // if (UserManager.getUsersWhoPreviouslyHaveLoggedIn().isEmpty()) {
-        // } else {
-        //     TextButton(
-        //         onClick = { setShowRegister(true) }
-        //     ) {
-        //         Text("¿No tienes cuenta? Regístrate")
-        //     }
-        // }
-
 
         TextButton(
             onClick = {

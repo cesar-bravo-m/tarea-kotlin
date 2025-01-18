@@ -3,6 +3,7 @@ package com.example.myapplication.ui.session
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -59,20 +60,39 @@ fun RegisterScreen(
                     Icon(Icons.Default.ArrowBack, "Volver")
                 }
             }
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = { setShowRegister(false) }) {
+                    Icon(Icons.Default.ArrowBack, "Volver")
+                }
+            }
         }
 
-        LinearProgressIndicator(
-            progress = currentStep / 3f,
-            modifier = Modifier.fillMaxWidth()
-        )
+        AnimatedContent(
+            targetState = currentStep,
+            transitionSpec = {
+                fadeIn(
+                    animationSpec = tween(durationMillis=500)
+                ) togetherWith fadeOut(animationSpec = tween(durationMillis=500))
+            }
+        ) { step ->
+            LinearProgressIndicator(
+                progress = step / 3f,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         AnimatedContent(
             targetState = currentStep,
             transitionSpec = {
-                slideInHorizontally { width -> width } with
-                slideOutHorizontally { width -> -width }
+                fadeIn(
+                    animationSpec = tween(durationMillis=500)
+                ) togetherWith fadeOut(animationSpec = tween(durationMillis=500))
             }
         ) { step ->
             Column(
@@ -83,7 +103,7 @@ fun RegisterScreen(
                 when (step) {
                     1 -> {
                         Text(
-                            text = "¿Cómo quires que te llamemos?",
+                            text = "¿Cómo quieres que te llamemos?",
                             style = MaterialTheme.typography.headlineSmall,
                             textAlign = TextAlign.Center
                         )

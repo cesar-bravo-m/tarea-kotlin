@@ -62,6 +62,7 @@ fun App() {
                 setVerificationCode = { verificationCode = it },
                 setIsLoggedIn = { isLoggedIn = it },
                 setShowRegister = { showRegister = it },
+                showRegister = showRegister,
                 context = LocalContext.current
             )
         }
