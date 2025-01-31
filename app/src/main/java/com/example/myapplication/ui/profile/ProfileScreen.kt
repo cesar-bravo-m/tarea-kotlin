@@ -47,7 +47,7 @@ fun ProfileScreen(
         )
 
         AvatarPicker(
-            selectedAvatar = selectedAvatar ?: R.drawable.male1,
+            selectedAvatar = selectedAvatar ?: R.raw.animatedmale1,
             onAvatarSelected = { selectedAvatar = it }
         )
 

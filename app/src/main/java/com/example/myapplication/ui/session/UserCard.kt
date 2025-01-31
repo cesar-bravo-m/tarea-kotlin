@@ -31,6 +31,9 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 
 @Composable
 fun UserCard(
@@ -153,10 +156,14 @@ private fun UserAvatar(
                 contentAlignment = Alignment.Center
             ) {
                 if (user.avatar != null) {
-                    Image(
-                        painter= painterResource(id=user.avatar),
-                        contentDescription="Avatar",
-                        modifier=Modifier.fillMaxSize(),
+                    val composition by rememberLottieComposition(
+                        spec = LottieCompositionSpec.RawRes(user.avatar)
+                    )
+
+                    LottieAnimation(
+                        composition = composition,
+                        iterations = Int.MAX_VALUE,
+                        modifier = Modifier.size(200.dp),
                     )
                 } else {
                     Text(
